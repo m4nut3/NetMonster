@@ -1,0 +1,10 @@
+
+# Colores de Terminal
+
+NORMAL="\033[0m"
+RED="\033[31;1m"
+GREEN="\033[32;1m"
+BLUE="\033[34;1m"
+ORANGE="\033[33;1m"
+WHITE_BACK_GREEN="\033[42;1m"
+WHITE_BACK_BLUE="\033[44;1m"

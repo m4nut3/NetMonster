@@ -1,0 +1,8 @@
+2. Darle valores por defecto a los inputs
+3. Usar la libreria requests para hacer la peticion GET a la ip y poder ver si se redirige a algún dominio
+4. Verificar el comportamiento en ips publicas
+5. Añadir escaneo UDP
+7. Cambiar los hipervínculos de las imagenes en el README.md
+8. Cambiar en la cabecera de comentarios en el código el número de la versión, el usage, etc
+9. Pullear a GitHub
+10. Publicar en LinkedIN
