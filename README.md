@@ -1,5 +1,6 @@
 # NetMonster v1.1
-![Logo](https://github.com/m4nut3/NetMonster/blob/main/images/Logo.jpg)
+
+<img src="images/Logo.png" height="128" width="128">
 
 NetMonster es una herramienta de reconocimiento inicial diseñada automatizar el proceso de descubrimiento y análisis de servicios en máquinas para la práctica de pentesting.
 
