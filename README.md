@@ -1,6 +1,6 @@
 # NetMonster v1.1
 
-<img src="images/Logo.png" height="128" width="128">
+<img src="images/Logo.png" height="500" width="500">
 
 NetMonster es una herramienta de reconocimiento inicial diseñada automatizar el proceso de descubrimiento y análisis de servicios en máquinas para la práctica de pentesting.
 
