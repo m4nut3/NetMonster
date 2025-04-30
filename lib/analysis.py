@@ -84,7 +84,7 @@ def nmap_enum(target):
 				domain = matches[0]
 
 				try:
-					add_host_elecction = input(f"Parece que se está aplicando virtual host, ¿quieres añadir el dominio {domain} a /etc/hosts? [Y/N]")
+					add_host_elecction = input(f"Parece que se está aplicando una redirección, ¿quieres añadir el dominio {domain} a /etc/hosts? [Y/N]")
 
 					if add_host_elecction.lower() == 'y':
 						subprocess.run([f"echo '{target} {domain}\' >> /etc/hosts"], shell=True, check=True)
