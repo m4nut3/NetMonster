@@ -8,15 +8,15 @@ def check_hosts(domain):
 
 	with open("/etc/hosts", "r") as hosts:
 
-        	content = hosts.read()
+		content = hosts.read()
 
-			if domain in content:
+	if domain in content:
 
-                return True
-	
-			else:
+		return True
 
-                return False
+	else:
+
+		return False
 
 
 def web_analyze(target, port):
