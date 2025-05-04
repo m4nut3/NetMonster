@@ -4,6 +4,21 @@ import re
 
 from lib.colors import NORMAL, RED, GREEN, BLUE, ORANGE, WHITE_BACK_GREEN, WHITE_BACK_BLUE
 
+def check_hosts(domain):
+
+	with open("/etc/hosts", "r") as hosts:
+
+        	content = hosts.read()
+
+			if domain in content:
+
+                return True
+	
+			else:
+
+                return False
+
+
 def web_analyze(target, port):
 
 #	Nombre de la función:
@@ -11,7 +26,7 @@ def web_analyze(target, port):
 
 #	Descripción:
 #    	[Función para el análisis en profundidad de los servicios web detectados con la herramienta WhatWeb.]
-	
+
 	service = "http"
 
 	if port[1]:
@@ -40,7 +55,7 @@ def nmap_enum(target):
 	ports_results = re.findall(r"(\d+)/(tcp|udp)\s+(open)(.*)", nmap_enum.stdout)
 
 	try:
-		so_results_list = re.findall(r"Aggressive OS guesses:\s+(.*?)\,|OS details:\s+(.*?)\n", nmap_enum.stdout)
+		so_results_list = re.findall(r"(?:Aggressive OS guesses:\s+(.*?))(?:,|\n)|(?:OS details:\s+(.*?))\n", nmap_enum.stdout)
 
 		if so_results_list[0][0]:
 			so_results = so_results_list[0][0]
@@ -53,6 +68,7 @@ def nmap_enum(target):
 	except Exception as e:
 
 		print(f"\r{RED}[-]{NORMAL} No se ha podido determinar el Sistema Operativo")
+		print(e)
 
 	print(f"{GREEN}[+] {NORMAL}Puertos encontrados:", end=" ")
 
@@ -72,31 +88,37 @@ def nmap_enum(target):
 			ports_string = ports_string + ","
 
 	print(f"\n{GREEN}[+] {NORMAL}Fichero {GREEN}nmap_enum{NORMAL} creado")
-	
+
 	try:
 		if http_ports:
 
 			response = subprocess.run([f"curl -v http://{target}:{http_ports[0][0]} 2>&1"], capture_output=True, text=True, shell=True, check=True)
-			matches = re.findall(r"Location: http://([^/]+)", response.stdout)
+			matches = re.findall(r"Location: http://([^\n]+)", response.stdout)
 
 			if matches:
 
 				domain = matches[0]
 
-				try:
-					add_host_elecction = input(f"Parece que se está aplicando una redirección, ¿quieres añadir el dominio {domain} a /etc/hosts? [Y/N]")
+				if not check_hosts(domain):
 
-					if add_host_elecction.lower() == 'y':
-						subprocess.run([f"echo '{target} {domain}\' >> /etc/hosts"], shell=True, check=True)
-						print(f"{GREEN}[+] {NORMAL}{domain} añadido correctamente al /etc/hosts")
-						target = domain
-			
-				except Exception as e:
-					
-					print(f"\r{RED}[-]{NORMAL} Error al añadir {domain} al /etc/hosts")
-					
+					try:
+						add_host_elecction = input(f"Parece que se está aplicando una redirección, ¿quieres añadir el dominio {domain} a /etc/hosts? [Y/N]")
+
+						if add_host_elecction.lower() == 'y':
+							subprocess.run([f"echo '{target} {domain}\' >> /etc/hosts"], shell=True, check=True)
+							print(f"{GREEN}[+] {NORMAL}{domain} añadido correctamente al /etc/hosts")
+							target = domain
+
+					except Exception as e:
+
+						print(f"\r{RED}[-]{NORMAL} Error al añadir {domain} al /etc/hosts")
+
+				else:
+
+					target = domain
+
 	except Exception as e:
-		
+
 		print(f"\r{RED}[-]{NORMAL} Error al identificar el dominio")
 
 
@@ -105,7 +127,7 @@ def nmap_enum(target):
 		print(f"{GREEN}[+] {NORMAL}Puertos con servicios web detectados: {len(http_ports)}\n")
 
 		for ports in http_ports:
-			
+
 			web_analyze(target, ports)
 
 	except Exception as e:
